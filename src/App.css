@@ -1,42 +1,198 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
-}
-
-.calculator {
-  width: 320px;
-  margin: 80px auto;
-  padding: 20px;
-  background: #222;
-  border-radius: 16px;
-}
-
-.display {
   background: #000;
-  color: white;
-  font-size: 40px;
-  padding: 20px;
-  text-align: right;
-  border-radius: 10px;
-  margin-bottom: 16px;
-  min-height: 50px;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-.buttons {
+#root {
+  width: 100%;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: #000;
+}
+
+/* ── Calculator shell ── */
+.calc {
+  width: min(360px, 100vw - 32px);
+  background: #1c1c1e;
+  border-radius: 28px;
+  padding: 20px 16px 16px;
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+/* ── Display ── */
+.display {
+  padding: 12px 8px 20px;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.display-prev {
+  color: #636366;
+  font-size: 0.95rem;
+  min-height: 1.3em;
+  word-break: break-all;
+  text-align: right;
+  font-weight: 300;
+}
+
+.display-val {
+  color: #fff;
+  font-weight: 200;
+  transition: font-size 0.12s ease;
+  word-break: break-all;
+  text-align: right;
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+}
+
+/* ── Button grid ── */
+.grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+/* Scientific function row sits above the main pad */
+.sci-grid {
   gap: 10px;
+  margin-bottom: 12px;
 }
 
-button {
-  font-size: 24px;
-  padding: 18px;
+/* ── Base button ── */
+.btn {
+  aspect-ratio: 1;
   border: none;
-  border-radius: 10px;
+  border-radius: 50%;
+  font-size: 1.35rem;
+  font-weight: 400;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.08s, transform 0.08s;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  font-family: inherit;
+  outline: none;
 }
 
-button:hover {
-  opacity: 0.8;
+.btn:active {
+  filter: brightness(1.5);
+  transform: scale(0.94);
+}
+
+/* ── Button variants ── */
+.btn.num {
+  background: #333333;
+  color: #fff;
+}
+
+.btn.fn {
+  background: #a5a5a5;
+  color: #1c1c1e;
+  font-size: 1.2rem;
+}
+
+.btn.op {
+  background: #ff9f0a;
+  color: #fff;
+  font-size: 1.7rem;
+  font-weight: 300;
+}
+
+.btn.eq {
+  background: #ff9f0a;
+  color: #fff;
+  font-size: 1.7rem;
+  font-weight: 300;
+}
+
+/* Scientific functions: shorter rounded keys, accent-colored labels */
+.btn.sci {
+  aspect-ratio: unset;
+  height: clamp(40px, 12vw, 52px);
+  border-radius: 26px;
+  background: #2c2c2e;
+  color: #ff9f0a;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+/* Zero spans 2 columns → pill shape */
+.btn.zero {
+  grid-column: span 2;
+  aspect-ratio: unset;
+  border-radius: 9999px;
+  justify-content: flex-start;
+  padding-left: 28px;
+}
+
+/* ── Mobile: full-screen layout ── */
+@media (max-width: 440px) {
+  body {
+    align-items: flex-end;
+  }
+
+  #root {
+    align-items: flex-end;
+  }
+
+  .calc {
+    width: 100vw;
+    border-radius: 0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    padding: 20px 12px max(16px, env(safe-area-inset-bottom));
+  }
+
+  .grid {
+    gap: 10px;
+  }
+
+  .btn {
+    font-size: 1.2rem;
+  }
+
+  .btn.op,
+  .btn.eq {
+    font-size: 1.5rem;
+  }
+
+  .btn.sci {
+    font-size: 0.95rem;
+    height: clamp(40px, 11vh, 50px);
+  }
+
+  .sci-grid {
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+}
+
+/* ── Hover for desktop ── */
+@media (hover: hover) {
+  .btn.num:hover  { background: #4a4a4a; }
+  .btn.fn:hover   { background: #c0c0c0; }
+  .btn.sci:hover  { background: #3a3a3c; }
+  .btn.op:hover,
+  .btn.eq:hover   { background: #ffb340; }
 }
